@@ -8,7 +8,7 @@
 <body>
 	<h3>Tạo mảng / chia mảng</h3>
 	<form method="post">
-	<input type="text" name="n" value="<?php echo isset($_POST['n']) ? $_POST['n'] : '' ?>" autofocus>
+	<input type="number" name="n" value="<?php echo isset($_POST['n']) ? $_POST['n'] : '' ?>" autofocus>
 	<input type="submit" name="tm" value="Tạo mảng">
 	<input type="submit" name="cm" value="Chia mảng">
 	</form>
