@@ -8,7 +8,7 @@
 <body>
 	<h3>Tạo mảng / chia mảng</h3>
 	<form method="post">
-	<input type="number" name="n" value="<?php echo isset($_POST['n']) ? $_POST['n'] : '' ?>" autofocus>
+	<input type="text" name="n" value="<?php echo isset($_POST['n']) ? $_POST['n'] : '' ?>" autofocus>
 	<input type="submit" name="tm" value="Tạo mảng">
 	<input type="submit" name="cm" value="Chia mảng">
 	</form>
@@ -42,10 +42,9 @@
 			else
 				array_push($arrint, $arr[$i]);
 		}
+		echo "<pre>";
 		var_dump($arrint);
-	?>
-	<br>
-	<?php
+		echo "<pre>";
 		var_dump($arrstr);
 	}
 
@@ -54,8 +53,8 @@
 	function rand_string( $length ) {
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$size = strlen( $chars );
-		$str = substr( str_shuffle( $chars ), 0, $length/2 );
-		for( $i = 0; $i < $length/2; $i++ ) {
+		$str = '';
+		for( $i = 0; $i < $length; $i++ ) {
 			$str .= $chars[ rand( 0, $size - 1 ) ];
 		}
 		return $str;
@@ -66,8 +65,8 @@
 	function rand_num($length){
 		$chars = "0123456789";
 		$size = strlen( $chars );
-		$str = substr( str_shuffle( $chars ), 0, $length/2 );
-		for( $i = 0; $i < $length/2; $i++ ) {
+		$str = rand(1,$size - 1);
+		for( $i = 1; $i < $length-1; $i++ ) {
 			$str .= $chars[ rand( 0, $size - 1 ) ];
 		}
 		$str=(int)$str;
