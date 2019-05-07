@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Bài 5</title>
+	<title>Demo</title>
 </head>
 <body>
 	<?php session_start(); ?>
@@ -29,35 +29,40 @@
 		if(isset($_POST['save'])){
 			$in=$_POST['ordnum'];
 			for($i=0; $i<$n; $i++){
-				array_splice($arr1[$i], 4, 1, $in[$i] );
+				array_splice($arr1[$i], 4, 1, $in[$i]);
 			}
-			$arr1=bubble_sort($arr1,'4','0');
-			table_echo($arr1,$n);
 			$_SESSION['arr'] = $arr1;
+			table_echo($arr1,$n);
 		}
 		if(isset($_POST['asc_pri'])){
 			$arr1=bubble_sort($arr1,'2','0');
 			table_echo($arr1,$n);
+			$_SESSION['arr'] = $arr1;
 		}
 		if(isset($_POST['des_pri'])){
 			$arr1=bubble_sort($arr1,'2','1');
 			table_echo($arr1,$n);
+			$_SESSION['arr'] = $arr1;
 		}
 		if(isset($_POST['asc_ord'])){
 			$arr1=bubble_sort($arr1,'4','0');
 			table_echo($arr1,$n);
+			$_SESSION['arr'] = $arr1;
 		}
 		if(isset($_POST['des_ord'])){
 			$arr1=bubble_sort($arr1,'4','1');
 			table_echo($arr1,$n);
+			$_SESSION['arr'] = $arr1;
 		}
 		if(isset($_POST['asc_total'])){
 			$arr1=bubble_sort($arr1,'5','0');
 			table_echo($arr1,$n);
+			$_SESSION['arr'] = $arr1;
 		}
 		if(isset($_POST['des_total'])){
 			$arr1=bubble_sort($arr1,'5','1');
 			table_echo($arr1,$n);
+			$_SESSION['arr'] = $arr1;
 		}
 		function table_echo($arr,$n){?>
 			<table border="1px">
@@ -78,7 +83,7 @@
 					}
 					?>
 					<td>
-						<input type="number" name="ordnum[]" value="<?php echo isset($_POST['ordnum[]']) ? $_POST['ordnum'] : $arr[$i][$j] ?>">
+						<input type="number" name="ordnum[]" value="<?php echo $arr[$i][4] ?>">
 					</td>
 					<?php
 				}
