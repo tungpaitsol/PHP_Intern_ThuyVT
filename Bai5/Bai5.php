@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,10 +19,9 @@
 			array_push($a[$i], $total);
 			array_push($arr, $a[$i]);
 		}
-		table_echo($arr);
 		$_SESSION['arr'] = $arr;
 	}
-
+	
 	$arr1=$_SESSION['arr'];
 	if(isset($_POST['save'])){
 		$in=$_POST['ordnum'];
@@ -31,67 +29,32 @@
 			array_splice($arr1[$i], 4, 1, $in[$i]);
 		}
 		$_SESSION['arr'] = $arr1;
-		table_echo($arr1);
 	}
 	if(isset($_POST['asc_pri'])){
-		$arr1=bubble_sort($arr1,'2','0');
-		table_echo($arr1);
+		$arr1=BubbleSort($arr1,'2','0');
 		$_SESSION['arr'] = $arr1;
 	}
 	if(isset($_POST['des_pri'])){
-		$arr1=bubble_sort($arr1,'2','1');
-		table_echo($arr1);
+		$arr1=BubbleSort($arr1,'2','1');
 		$_SESSION['arr'] = $arr1;
 	}
 	if(isset($_POST['asc_ord'])){
-		$arr1=bubble_sort($arr1,'4','0');
-		table_echo($arr1);
+		$arr1=BubbleSort($arr1,'4','0');
 		$_SESSION['arr'] = $arr1;
 	}
 	if(isset($_POST['des_ord'])){
-		$arr1=bubble_sort($arr1,'4','1');
-		table_echo($arr1);
+		$arr1=BubbleSort($arr1,'4','1');
 		$_SESSION['arr'] = $arr1;
 	}
 	if(isset($_POST['asc_total'])){
-		$arr1=bubble_sort($arr1,'5','0');
-		table_echo($arr1);
+		$arr1=BubbleSort($arr1,'5','0');
 		$_SESSION['arr'] = $arr1;
 	}
 	if(isset($_POST['des_total'])){
-		$arr1=bubble_sort($arr1,'5','1');
-		table_echo($arr1);
+		$arr1=BubbleSort($arr1,'5','1');
 		$_SESSION['arr'] = $arr1;
 	}
-
-	function table_echo($arr){?>
-		<table border="1px">
-			<tr>
-				<th>Product ID</th>
-				<th>Product Name</th>
-				<th>Product Price</th>
-				<th>Quantity</th>
-				<th>Order</th>
-			</tr>
-			<?php
-			for($i=0;$i<count($arr);$i++){
-				echo "<tr>";
-				for($j=0; $j<count($arr[$i])-2;$j++){
-					echo "<td>";
-					echo $arr[$i][$j];
-					echo "</td>";
-				}
-				?>
-				<td>
-					<input type="number" name="ordnum[]" value="<?php echo $arr[$i][4] ?>">
-				</td>
-				<?php
-			}
-			?>
-		</table>
-		<?php
-	}
-	function bubble_sort($mang,$a,$type){
+	function BubbleSort($mang,$a,$type){
 		$sophantu = count($mang);
 		for ($i = 0; $i < ($sophantu - 1); $i++){
 			for ($j = $i + 1; $j < $sophantu; $j++){
@@ -114,9 +77,33 @@
 		return $mang;
 	}
 	?>
-	
 	<h3>Sắp xếp dữ liệu</h3>
-	<form action="" method="post">
+	<form method="post">
+		<?php
+		if (isset($_SESSION['arr'])) {
+			?>
+			<table border="1px">
+				<tr>
+					<th>Product ID</th>
+					<th>Product Name</th>
+					<th>Product Price</th>
+					<th>Quantity</th>
+					<th>Order</th>
+				</tr>
+				<?php foreach ($_SESSION['arr'] as $itemt) { ?>
+					<tr>
+						<?php for($i=0; $i<count($_SESSION['arr'][0]) -2; $i++){ ?>
+							<td><?php echo $itemt[$i] ?></td>
+						<?php } ?>
+						<td>
+							<input type='text' name='ordnum[]' value="<?php echo $itemt[4] ?>">
+						</td>
+					</tr>
+					<?php 
+				}
+			}
+			?>
+		</table>
 		<input type="number" name="input" 
 		value="<?php echo isset($_POST['input']) ? $_POST['input'] : '' ?>">
 		<input type="submit" name="ok" value="OK"><br>
