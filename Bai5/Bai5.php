@@ -17,8 +17,8 @@
 		$arr = array();
 		if(isset($_POST['ok'])){
 			for($i=0;$i<$n;$i++){
-				$a[$i]=array($pro[rand(0,$size-1)],rand(1000000,30000000),rand(1,50),rand(1,50));
-				$total=$a[$i][1]*$a[$i][2];
+				$a[$i]=array($i,$pro[rand(0,$size-1)],rand(1000000,30000000),rand(1,50),rand(1,50));
+				$total=$a[$i][2]*$a[$i][3];
 				array_push($a[$i], $total);
 				array_push($arr, $a[$i]);
 			}
@@ -27,36 +27,35 @@
 		}
 		$arr1=$_SESSION['arr'];
 		if(isset($_POST['save'])){
-			$in=$_SESSION['ordnum'];
+			$in=$_POST['ordnum'];
 			for($i=0; $i<$n; $i++){
-				if($arr1[$i][3]!=$in[$i])
-					$arr1[$i][3]=$in[$i];
+				array_splice($arr1[$i], 4, 1, $in[$i] );
 			}
-			$arr1=bubble_sort($arr1,'3','0');
-			table_echo($arr1,$n);
-		}
-		if(isset($_POST['asc_pri'])){
-			$arr1=bubble_sort($arr1,'1','0');
-			table_echo($arr1,$n);
-		}
-		if(isset($_POST['des_pri'])){
-			$arr1=bubble_sort($arr1,'1','1');
-			table_echo($arr1,$n);
-		}
-		if(isset($_POST['asc_ord'])){
-			$arr1=bubble_sort($arr1,'3','0');
-			table_echo($arr1,$n);
-		}
-		if(isset($_POST['des_ord'])){
-			$arr1=bubble_sort($arr1,'3','1');
-			table_echo($arr1,$n);
-		}
-		if(isset($_POST['asc_total'])){
 			$arr1=bubble_sort($arr1,'4','0');
 			table_echo($arr1,$n);
 		}
-		if(isset($_POST['des_total'])){
+		if(isset($_POST['asc_pri'])){
+			$arr1=bubble_sort($arr1,'2','0');
+			table_echo($arr1,$n);
+		}
+		if(isset($_POST['des_pri'])){
+			$arr1=bubble_sort($arr1,'2','1');
+			table_echo($arr1,$n);
+		}
+		if(isset($_POST['asc_ord'])){
+			$arr1=bubble_sort($arr1,'4','0');
+			table_echo($arr1,$n);
+		}
+		if(isset($_POST['des_ord'])){
 			$arr1=bubble_sort($arr1,'4','1');
+			table_echo($arr1,$n);
+		}
+		if(isset($_POST['asc_total'])){
+			$arr1=bubble_sort($arr1,'5','0');
+			table_echo($arr1,$n);
+		}
+		if(isset($_POST['des_total'])){
+			$arr1=bubble_sort($arr1,'5','1');
 			table_echo($arr1,$n);
 		}
 		function table_echo($arr,$n){?>
@@ -71,10 +70,7 @@
 				<?php
 				for($i=0;$i<$n;$i++){
 					echo "<tr>";
-					echo "<td>";
-					echo $i;
-					echo "</td>";
-					for($j=0; $j<3;$j++){
+					for($j=0; $j<4;$j++){
 						echo "<td>";
 						echo $arr[$i][$j];
 						echo "</td>";
@@ -85,7 +81,6 @@
 					</td>
 					<?php
 				}
-				$_SESSION['ordnum']=$_POST['ordnum'];
 				?>
 			</table>
 			<?php
@@ -115,7 +110,7 @@
 		?>
 		<input type="number" name="input" 
 		value="<?php echo isset($_POST['input']) ? $_POST['input'] : '' ?>">
-		<input type="submit" name="ok" value="OK"><br><br>
+		<input type="submit" name="ok" value="OK"><br>
 		<input type="submit" name="save" value="Lưu order"><br>
 		Price:<br>
 		<input type="submit" name="asc_pri" value="Tăng dần">
@@ -126,6 +121,5 @@
 		Tổng tiền:<br>
 		<input type="submit" name="asc_total" value="Tăng dần">
 		<input type="submit" name="des_total" value="Giảm dần">
-	</form>
-</body>
-</html>
+	</body>
+	</html>
