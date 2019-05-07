@@ -33,6 +33,7 @@
 			}
 			$arr1=bubble_sort($arr1,'4','0');
 			table_echo($arr1,$n);
+			$_SESSION['arr'] = $arr1;
 		}
 		if(isset($_POST['asc_pri'])){
 			$arr1=bubble_sort($arr1,'2','0');
