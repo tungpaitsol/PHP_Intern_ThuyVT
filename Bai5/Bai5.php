@@ -8,20 +8,10 @@
 	<?php 
 	session_start();
 	$i=0;
-	$arr = array();
 	$n=isset($_POST['input']) ? $_POST['input'] : '';
-	$pro = array("Iphone X","Oppo F11 Pro","Oppo A7","Galaxy S10+","Iphone Xs Max","Vivo V15","Huawei P30","Oppo Find X","Galaxy S9+","Xiaomi Mi 8");
-	$size = count($pro);
 	if(isset($_POST['ok'])){
-		for($i=0;$i<$n;$i++){
-			$a[$i]=array($i,$pro[rand(0,$size-1)],rand(1000000,30000000),rand(1,50),rand(1,50));
-			$total=$a[$i][2]*$a[$i][3];
-			array_push($a[$i], $total);
-			array_push($arr, $a[$i]);
-		}
-		$_SESSION['arr'] = $arr;
+		$_SESSION['arr']=CreatArray($n);
 	}
-	
 	$arr1=$_SESSION['arr'];
 	if(isset($_POST['save'])){
 		$in=$_POST['ordnum'];
@@ -54,6 +44,19 @@
 		$arr1=BubbleSort($arr1,'5','1');
 		$_SESSION['arr'] = $arr1;
 	}
+
+	function CreatArray($n){
+		$arr = array();
+		$pro = array("Iphone X","Oppo F11 Pro","Oppo A7","Galaxy S10+","Iphone Xs Max","Vivo V15","Huawei P30","Oppo Find X","Galaxy S9+","Xiaomi Mi 8");
+		$size = count($pro);
+		for($i=0;$i<$n;$i++){
+			$a[$i]=array($i,$pro[rand(0,$size-1)],rand(1000000,30000000),rand(1,50),rand(1,50));
+			$total=$a[$i][2]*$a[$i][3];
+			array_push($a[$i], $total);
+			array_push($arr, $a[$i]);
+		}
+		return $arr;
+	}
 	function BubbleSort($mang,$a,$type){
 		$sophantu = count($mang);
 		for ($i = 0; $i < ($sophantu - 1); $i++){
@@ -77,6 +80,7 @@
 		return $mang;
 	}
 	?>
+
 	<h3>Sắp xếp dữ liệu</h3>
 	<form method="post">
 		<?php
@@ -90,13 +94,13 @@
 					<th>Quantity</th>
 					<th>Order</th>
 				</tr>
-				<?php foreach ($_SESSION['arr'] as $itemt) { ?>
+				<?php foreach ($_SESSION['arr'] as $val) { ?>
 					<tr>
 						<?php for($i=0; $i<count($_SESSION['arr'][0]) -2; $i++){ ?>
-							<td><?php echo $itemt[$i] ?></td>
+							<td><?php echo $val[$i] ?></td>
 						<?php } ?>
 						<td>
-							<input type='text' name='ordnum[]' value="<?php echo $itemt[4] ?>">
+							<input type='text' name='ordnum[]' value="<?php echo $val[4] ?>">
 						</td>
 					</tr>
 					<?php 
