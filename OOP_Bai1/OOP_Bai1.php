@@ -120,35 +120,6 @@ class WorkTime{
 	public function getEndDatetime(){
 		return $this->end_datetime;
 	}
-	public function CheckMonth($m,$y){
-		switch ($m) {
-			case 1: 
-			case 3: 
-			case 5: 
-			case 7: 
-			case 8: 
-			case 10: 
-			case 12:
-				$d=31;
-				break; 
-			case 4: 
-			case 6: 
-			case 9: 
-			case 11: 
-				$d=30;
-				break; 
-			case 2: 
-				if( $y % 100 != 0 && $y % 4 == 0 ) { 
-					$d=29;
-				} else { 
-					$d=28;
-				} 
-				break; 
-			default:
-				$d=0;
-		}
-		echo "Tháng ".$m." năm ".$y." có ".$d." ngày";
-	}
 }
 
 $employeefulltime = array();
@@ -168,49 +139,43 @@ for($i=0; $i<count($listWorkTime); $i++){
 
 
 
-
-date_default_timezone_set("Asia/Ho_Chi_Minh");
-function tinhcong($employee,$worktime){
-	foreach ($employee as $val) {
-		$count=0;
-		foreach ($worktime as $value) {
-			if($value->getMemberCode()==$val->getMemberCode()){
-				if((date("H:i:s",strtotime($value->getStartDatetime())) <= strtotime($val->getStartWorkTime()))
-					&& (date("H:i:s",strtotime($value->getEndDatetime())) >= date("H:i:s",strtotime($val->getStartWorkTime()))))
-				{
-					if($val->getHasLunchBreak()=="1"){
-						$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime()) - 90*60;
-						if($t>=$val->getWorkHour()*60*60){
-							$count+=1;
+class General {
+	public function tinhcong($employee,$worktime){
+		$lunch_break=90*60;
+		$seconds=60*60;
+		foreach ($employee as $val) {
+			$count=0;
+			foreach ($worktime as $value) {
+				if($value->getMemberCode()==$val->getMemberCode()){
+					if((date("H:i:s",strtotime($value->getStartDatetime())) <= strtotime($val->getStartWorkTime()))
+						&& (date("H:i:s",strtotime($value->getEndDatetime())) >= date("H:i:s",strtotime($val->getStartWorkTime()))))
+					{
+						if($val->getHasLunchBreak()=="1"){
+							$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime()) - $lunch_break;
+							if($t>=$val->getWorkHour()*$seconds)
+								$count+=1;
+							else $count+=0.5;
 						}
 						else{
-							$count+=0.5;
-						}
-					}
-					else{
-						$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime());
-						if($t>=$val->getWorkHour()*60*60){
-							$count+=1;
-						}
-						else{
-							$count+=0.5;
+							$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime());
+							if($t>=$val->getWorkHour()*$seconds)
+								$count+=1;
+							else $count+=0.5;
 						}
 					}
 				}
 			}
+			$val->setWorkDays($count);
 		}
-		$val->setWorkDays($count);
 	}
 }
 
-
-tinhcong($employeefulltime,$worktime);
-tinhcong($employeeparttime,$worktime);
-
+date_default_timezone_set("Asia/Ho_Chi_Minh");
+General::tinhcong($employeefulltime,$worktime);
+General::tinhcong($employeeparttime,$worktime);
 
 echo "<pre>";
 print_r($employeefulltime);
 print_r($employeeparttime);
 // print_r($worktime);
-
 ?>
