@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bài 1 OOP</title>
+</head>
+<body>
+	
+</body>
+</html>
 <?php
 include("OOP_Bai1.data.php");
 class Employee{
@@ -141,31 +151,26 @@ for($i=0; $i<count($listWorkTime); $i++){
 
 class General {
 	public function tinhcong($employee,$worktime) {
-		$lunch_break=90*60;
 		$seconds=60*60;
 		foreach ($employee as $val) {
+			if($val->getHasLunchBreak()==true)
+				$lunch_break=90*60;
+			else $lunch_break=0;
 			$count=0;
 			foreach ($worktime as $value) {
 				if($value->getMemberCode()==$val->getMemberCode()){
+					$Endworktime=strtotime($val->getStartWorkTime())+strtotime($val->getWorkHour())+$lunch_break;
 					if((date("H:i:s",strtotime($value->getStartDatetime())) <= strtotime($val->getStartWorkTime()))
-						&& (date("H:i:s",strtotime($value->getEndDatetime())) >= date("H:i:s",strtotime($val->getStartWorkTime()))))
+						&& (date("H:i:s",strtotime($value->getEndDatetime())) >= date("H:i:s",$Endworktime)))
 					{
-						if($val->getHasLunchBreak()=="1"){
-							$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime()) - $lunch_break;
-							if($t>=$val->getWorkHour()*$seconds)
-								$count+=1;
-							else $count+=0.5;
-						}
-						else{
-							$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime());
-							if($t>=$val->getWorkHour()*$seconds)
-								$count+=1;
-							else $count+=0.5;
-						}
+						$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime()) - $lunch_break;
+						if($t>=$val->getWorkHour()*$seconds)
+							$count+=1;
+						else $count+=0.5;
 					}
 				}
+				$val->setWorkDays($count);
 			}
-			$val->setWorkDays($count);
 		}
 	}
 	public function CheckMonth($m,$y) {
@@ -229,7 +234,6 @@ class General {
     public function TinhLuong($employee,$worktime){
     	$month=date("n",strtotime($worktime[0]->getStartDatetime()));
     	$year=date("Y",strtotime($worktime[0]->getStartDatetime()));
-    	$day=date("d",strtotime($worktime[0]->getStartDatetime()));
     	$days=General::CheckMonth($month,$year);
     	$countweekend=0;
     	for($i=1; $i<$days; $i++){
