@@ -140,7 +140,7 @@ for($i=0; $i<count($listWorkTime); $i++){
 
 
 class General {
-	public function tinhcong($employee,$worktime){
+	public function tinhcong($employee,$worktime) {
 		$lunch_break=90*60;
 		$seconds=60*60;
 		foreach ($employee as $val) {
@@ -168,11 +168,96 @@ class General {
 			$val->setWorkDays($count);
 		}
 	}
+	public function CheckMonth($m,$y) {
+        switch ($m) {
+            case 1: 
+            case 3: 
+            case 5: 
+            case 7: 
+            case 8: 
+            case 10: 
+            case 12:
+                $d=31;
+                break; 
+            case 4: 
+            case 6: 
+            case 9: 
+            case 11: 
+                $d=30;
+                break; 
+            case 2: 
+                if( $y % 100 != 0 && $y % 4 == 0 ) { 
+                    $d=29;
+                } else { 
+                    $d=28;
+                } 
+                break; 
+            default:
+                $d=0;
+        }
+        return $d;
+    }
+    public function Holiday($d, $m) {
+    	$count=0;
+        $arr = array(
+            '1_1' => 'Tết dương lịch',
+    		'4_2' => 'Tết âm lịch',
+    		'5_2' => 'Tết âm lịch',
+    		'6_2' => 'Tết âm lịch',
+    		'7_2' => 'Tết âm lịch',
+    		'8_2' => 'Tết âm lịch',
+    		'15_4' => 'Giỗ Tổ Hùng Vương',
+    		'30_4' => 'Giải phóng miền nam',
+    		'1_5' => 'Quốc tế lao động',
+    		'2_9' => 'Quốc khánh'
+        );
+ 
+        if (array_key_exists($d . '_' . $m, $arr)) {
+            $count+=1;
+        } else {
+            $count+=0;
+        }
+        return $count;
+    }
+    public function Weekend($w) {
+    	$count=0;
+    	if(($w=="Saturday")||($w=="Sunday")){
+    		$count+=1;
+    	}
+    	return $count;
+    }
+    public function TinhLuong($employee,$worktime){
+    	$month=date("n",strtotime($worktime[0]->getStartDatetime()));
+    	$year=date("Y",strtotime($worktime[0]->getStartDatetime()));
+    	$day=date("d",strtotime($worktime[0]->getStartDatetime()));
+    	$days=General::CheckMonth($month,$year);
+    	$countweekend=0;
+    	for($i=1; $i<$days; $i++){
+    		$thu=date("l",strtotime($year . '-' . $month . '-' . $i));
+    		if(General::Weekend($thu)!=0)
+    			$countweekend+=1;
+    	}
+    	$countholiday=0;
+    	for($i=1; $i<=$days;$i++){
+    		if(General::Holiday($i,$month)!=0)
+    			$countholiday+=1;
+    	}
+    	$totalworkdays=$days-$countweekend-$countholiday;
+    	foreach ($employee as $value) {
+    		$salary1day=$value->getSalary()/$totalworkdays;
+    		$salary=$salary1day*$value->getWorkDays();
+    		$value->setSalary($salary);
+    	}
+    }
 }
+
 
 date_default_timezone_set("Asia/Ho_Chi_Minh");
 General::tinhcong($employeefulltime,$worktime);
 General::tinhcong($employeeparttime,$worktime);
+General::TinhLuong($employeefulltime,$worktime);
+General::TinhLuong($employeeparttime,$worktime);
+
 
 echo "<pre>";
 print_r($employeefulltime);
