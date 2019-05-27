@@ -85,6 +85,11 @@ $listWorkTime = array(
 	),
 	array(
 		'member_code' => '001',
+		'start_datetime' => '2019-04-02 08:10:00',
+		'end_datetime' => '2019-04-02 17:00:00'
+	),
+	array(
+		'member_code' => '001',
 		'start_datetime' => '2019-04-03 08:50:00',
 		'end_datetime' => '2019-04-03 18:00:00'
 	),
