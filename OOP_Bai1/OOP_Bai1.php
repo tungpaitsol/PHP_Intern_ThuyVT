@@ -32,6 +32,8 @@ class Employee{
 		$this->start_work_time = $start_work_time;
 		$this->work_hour = $work_hour;
 		$this->has_lunch_break = $has_lunch_break;
+		$this->workdays = 0;
+		$this->total_work_time = 0;
 	}
 	public function setFullName($full_name){
 		$this->full_name=$full_name;
