@@ -16,27 +16,22 @@ class Employee{
 	private $age;
 	private $gender;
 	private $marital_status;
-	private $total_work_time;
 	private $salary;
-	private $workdays;
 	private $start_work_time;
 	private $work_hour;
 	private $has_lunch_break;
-	public function __construct( $member_code, $full_name, $age, $gender, $marital_status, $total_work_time, $salary, $workdays, $start_work_time, $work_hour, $has_lunch_break){
+	private $workdays;
+	private $total_work_time;
+	public function __construct( $member_code, $full_name, $age, $gender, $marital_status, $salary, $start_work_time, $work_hour, $has_lunch_break){
 		$this->member_code = $member_code;
 		$this->full_name = $full_name;
 		$this->age = $age;
 		$this->gender = $gender;
 		$this->marital_status = $marital_status;
-		$this->total_work_time = $total_work_time;
 		$this->salary = $salary;
-		$this->workdays = $workdays;
 		$this->start_work_time = $start_work_time;
 		$this->work_hour = $work_hour;
 		$this->has_lunch_break = $has_lunch_break;
-	}
-	public function setMemberCode($member_code){
-		$this->member_code=$member_code;
 	}
 	public function setFullName($full_name){
 		$this->full_name=$full_name;
@@ -112,9 +107,6 @@ class WorkTime{
 		$this->start_datetime = $start_datetime;
 		$this->end_datetime = $end_datetime;
 	}
-	public function setMemberCode($member_code){
-		$this->member_code=$member_code;
-	}
 	public function setStartDatetime($start_datetime){
 		$this->start_datetime=$start_datetime;
 	}
@@ -134,12 +126,12 @@ class WorkTime{
 
 $employeefulltime = array();
 for($i=0; $i<count($listMemberFullTime); $i++){
-	array_push($employeefulltime,new Employee($listMemberFullTime[$i]['code'],$listMemberFullTime[$i]['full_name'],$listMemberFullTime[$i]['age'],$listMemberFullTime[$i]['gender'],$listMemberFullTime[$i]['marital_status'],$listMemberFullTime[$i]['total_work_time'],$listMemberFullTime[$i]['salary'],$listMemberFullTime[$i]['workdays'],$listMemberFullTime[$i]['start_work_time'],$listMemberFullTime[$i]['work_hour'],$listMemberFullTime[$i]['has_lunch_break']));
+	array_push($employeefulltime,new Employee($listMemberFullTime[$i]['code'],$listMemberFullTime[$i]['full_name'],$listMemberFullTime[$i]['age'],$listMemberFullTime[$i]['gender'],$listMemberFullTime[$i]['marital_status'],$listMemberFullTime[$i]['salary'],$listMemberFullTime[$i]['start_work_time'],$listMemberFullTime[$i]['work_hour'],$listMemberFullTime[$i]['has_lunch_break']));
 };
 
 $employeeparttime = array();
 for($i=0; $i<count($listMemberPartTime); $i++){
-	array_push($employeeparttime,new Employee($listMemberPartTime[$i]['code'],$listMemberPartTime[$i]['full_name'],$listMemberPartTime[$i]['age'],$listMemberPartTime[$i]['gender'],$listMemberPartTime[$i]['marital_status'],$listMemberPartTime[$i]['total_work_time'],$listMemberPartTime[$i]['salary'],$listMemberPartTime[$i]['workdays'],$listMemberPartTime[$i]['start_work_time'],$listMemberPartTime[$i]['work_hour'],$listMemberPartTime[$i]['has_lunch_break']));
+	array_push($employeeparttime,new Employee($listMemberPartTime[$i]['code'],$listMemberPartTime[$i]['full_name'],$listMemberPartTime[$i]['age'],$listMemberPartTime[$i]['gender'],$listMemberPartTime[$i]['marital_status'],$listMemberPartTime[$i]['salary'],$listMemberPartTime[$i]['start_work_time'],$listMemberPartTime[$i]['work_hour'],$listMemberPartTime[$i]['has_lunch_break']));
 };
 
 $worktime = array();
@@ -151,45 +143,32 @@ class General {
 	public function tinhcong($employee,$worktime) {
 		$seconds=60*60;
 		foreach ($employee as $val) {
-			if($val->getHasLunchBreak()==true)
+			if($val->getHasLunchBreak())
 				$lunch_break=90*60;
-			else $lunch_break=0;
+			else 
+				$lunch_break=0;
 			$count=0;
 			foreach ($worktime as $value) {
 				if($value->getMemberCode()==$val->getMemberCode()){
-					$Endworktime=strtotime($val->getStartWorkTime())+strtotime($val->getWorkHour())+$lunch_break;
-					if((date("H:i:s",strtotime($value->getStartDatetime())) <= strtotime($val->getStartWorkTime()))
+					$Endworktime=strtotime($val->getStartWorkTime())+$val->getWorkHour()*$seconds+$lunch_break;
+					if((date("H:i:s",strtotime($value->getStartDatetime())) <= date("H:i:s",strtotime($val->getStartWorkTime())))
 						&& (date("H:i:s",strtotime($value->getEndDatetime())) >= date("H:i:s",$Endworktime)))
-					{
-						$t = strtotime($value -> getEndDatetime()) - strtotime($value->getStartDatetime()) - $lunch_break;
-						if($t>=$val->getWorkHour()*$seconds)
-							$count+=1;
-						else $count+=0.5;
-					}
+						$count+=1;
+					else
+						$count+=0.5;
+					$val->setWorkDays($count);
 				}
-				$val->setWorkDays($count);
 			}
 		}
 	}
-	public function Holiday($d, $m) {
+	public function Holiday($arr, $y, $m, $d) {
 		$count=0;
-		$arr = array(
-			'1_1' => 'Tết dương lịch',
-			'4_2' => 'Tết âm lịch',
-			'5_2' => 'Tết âm lịch',
-			'6_2' => 'Tết âm lịch',
-			'7_2' => 'Tết âm lịch',
-			'8_2' => 'Tết âm lịch',
-			'15_4' => 'Giỗ Tổ Hùng Vương',
-			'30_4' => 'Giải phóng miền nam',
-			'1_5' => 'Quốc tế lao động',
-			'2_9' => 'Quốc khánh'
-		);
-		if (array_key_exists($d . '_' . $m, $arr)) 
+		
+		if (array_key_exists($y . '-' . $m . '-' . $d, $arr)) 
 			return true;
 		return false;
 	}
-	public function WorkDay($w) {
+	public function WorkDayOnWeek($w) {
 		if(($w=="Saturday")||($w=="Sunday")){
 			return false;
 		}
@@ -199,13 +178,25 @@ class General {
 		$month=date("n",strtotime($worktime[0]->getStartDatetime()));
 		$year=date("Y",strtotime($worktime[0]->getStartDatetime()));
 		$days=date("t",strtotime($year . '-' . $month));
+		$arr = array(
+			'2019-1-1' => 'Tết dương lịch',
+			'2019-2-4' => 'Tết âm lịch',
+			'2019-2-5' => 'Tết âm lịch',
+			'2019-2-6' => 'Tết âm lịch',
+			'2019-2-7' => 'Tết âm lịch',
+			'2019-2-8' => 'Tết âm lịch',
+			'2019-4-15' => 'Giỗ Tổ Hùng Vương',
+			'2019-4-30' => 'Giải phóng miền nam',
+			'2019-5-1' => 'Quốc tế lao động',
+			'2019-9-2' => 'Quốc khánh'
+		);
 		$countworkday=0;
 		$countholiday=0;
 		for($i=1; $i<=$days; $i++){
 			$thu=date("l",strtotime($year . '-' . $month . '-' . $i));
-			if(General::WorkDay($thu))
+			if(General::WorkDayOnWeek($thu))
 				$countworkday+=1;
-			if(General::Holiday($i,$month))
+			if(General::Holiday($arr,$year,$month,$i))
 				$countholiday+=1;
 		}
 		$totalworkdays=$countworkday-$countholiday;
