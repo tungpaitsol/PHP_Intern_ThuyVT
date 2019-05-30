@@ -22,7 +22,7 @@ class Employee{
 	private $has_lunch_break;
 	private $workdays;
 	private $total_work_time;
-	public function __construct( $member_code, $full_name, $age, $gender, $marital_status, $salary, $start_work_time, $work_hour, $has_lunch_break){
+	public function __construct( $member_code, $full_name, $age, $gender, $marital_status, $salary, $start_work_time, $work_hour, $has_lunch_break, $workdays=0, $total_work_time=0){
 		$this->member_code = $member_code;
 		$this->full_name = $full_name;
 		$this->age = $age;
@@ -32,8 +32,8 @@ class Employee{
 		$this->start_work_time = $start_work_time;
 		$this->work_hour = $work_hour;
 		$this->has_lunch_break = $has_lunch_break;
-		$this->workdays = 0;
-		$this->total_work_time = 0;
+		$this->workdays = $workdays;
+		$this->total_work_time = $total_work_time;
 	}
 	public function setFullName($full_name){
 		$this->full_name=$full_name;
