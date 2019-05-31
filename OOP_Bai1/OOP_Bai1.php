@@ -194,7 +194,7 @@ class General {
         return false;
     }
     public function WorkDay($y,$m){
-        $days=date("t",strtotime($y.$m));
+        $days=date("t",strtotime($y."-".$m));
         $workday=0;
         for($i=1; $i<=$days; $i++){
             $currentDate = sprintf("%s-%02d-%02d", $y, $m, $i);
