@@ -85,6 +85,6 @@ $content = $language[$lang]->getValue();
 <script type="text/javascript">
 	function handleSelect(elm)
 	{
-		window.location.href = "test1.php?lang="+elm.value;
+		window.location.href = "OOP_Bai2.php?lang="+elm.value;
 	}
 </script>

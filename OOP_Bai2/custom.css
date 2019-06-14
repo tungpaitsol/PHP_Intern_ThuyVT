@@ -18,17 +18,6 @@ input[type=checkbox]{
     border: none;
     width: 100%;
 }
-.signin {
-    background-color: #f1f1f1;
-    text-align: center;
-}
-.terms {
-    display: flex;
-}
-.terms a, .signin a{
-    color: #4CAF50;
-    text-decoration: none;
-}
 form { 
     margin: 0 auto; 
     width:250px;
