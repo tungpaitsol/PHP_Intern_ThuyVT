@@ -6,18 +6,32 @@ class Language
 {
 	private $name;
 	private $value;
-	function __construct($name, $value)
-	{
-		$this->name = $name;
-		$this->value = $value;
-	}
-	public function seValue($value){
-		$this->value = $value;
-	}
+
+	public function __construct(){}
+
 	public function getValue(){
 		return $this->value;
 	}
 }
+
+class Singleton
+{
+	private static $instance;
+	public static function getInstance($name,$value)
+	{
+		if (!self::$instance) {
+			self::$instance = new Language($name,$value);
+		}
+		return self::$instance;
+	}
+}
+
+$vi = Singleton::getInstance('vietnamese',LangContext::getContent('vi'));
+$lang=$_SESSION['lang'];
+$content=$vi->getValue();
+echo "<pre>";
+print_r($vi);
+
 class LangContext
 {
 	public function getContent($lang){
@@ -34,17 +48,12 @@ class LangContext
 			$i++;
 		}
 		//Tạo mảng sử dụng các giá trị từ mảng $key là các key và các giá trị từ mảng $value là các value tương ứng:
-		$arr=array_combine($key,$value); 
+		$arr=array_combine($key,$value);
 		return $arr;
 		fclose($myfile);
 	}
 }
-$language = array(
-	'en' => new Language("english",LangContext::getContent('en')),
-	'vi' => new Language("vietnamese",LangContext::getContent('vi'))
-);
-$lang=$_SESSION['lang'];
-$content = $language[$lang]->getValue();
+ 
 ?>
 <!DOCTYPE html>
 <html>
@@ -71,7 +80,7 @@ $content = $language[$lang]->getValue();
 			<h1><?php echo $_SESSION['lang']=='en' ? "REGISTER" : "ĐĂNG KÝ" ?></h1>
 			<p><?php echo $_SESSION['lang']=='en' ? "Creat your account. It's free and only takes a minute. " : "Tạo tài khoản của bạn. Miễn phí và chỉ mất một phút. " ?></p>
 			<div class="name">
-				<input class="col-md-6 cl1" type="text" placeholder="<?php echo isset($_SESSION['lang'])?$content['firstname']:"" ?>"name="firstname">
+				<input class="col-md-6 cl1" type="text" value="<?php echo isset($_SESSION['lang'])?$content['firstname']:"" ?>"name="firstname">
 				<input class="col-md-6 cl2" type="text" placeholder="<?php echo isset($_SESSION['lang'])?$content['lastname']:"" ?>" name="lastname">
 			</div>
 			<input class="col-md-12" type="text" placeholder="<?php echo isset($_SESSION['lang'])?$content['email']:"" ?>" name="email">
@@ -88,3 +97,4 @@ $content = $language[$lang]->getValue();
 		window.location.href = "OOP_Bai2.php?lang="+elm.value;
 	}
 </script>
+
