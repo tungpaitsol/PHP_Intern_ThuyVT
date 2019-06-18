@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
 }
+input::-webkit-input-placeholder {color: #bbb; }
 input[type=text], input[type=password] {
     padding: 10px;
     display: inline-block;
