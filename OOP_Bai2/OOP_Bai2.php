@@ -1,24 +1,35 @@
 <?php
 class Language
 {
+	private $code;
+	private $name;
 	private $value;
 
-	public function __construct($value){
+	public function __construct($code, $name, $value){
+		$this->code = $code;
+		$this->name = $name;
 		$this->value = $value;
 	}
 
+	public function getCode(){
+		return $this->code;
+	}
+	public function getName(){
+		return $this->name;
+	}
 	public function getValue(){
 		return $this->value;
 	}
+
 }
 
 class Singleton
 {
 	private static $instance;
-	public static function getInstance($value)
+	public static function getInstance($code, $name, $value)
 	{
 		if (!self::$instance) {
-			self::$instance = new Language($value);
+			self::$instance = new Language($code, $name, $value);
 		}
 		return self::$instance;
 	}
@@ -46,18 +57,23 @@ class LangContext
 	}
 	public function getValue($lang,$pro)
 	{
-		$cont = Singleton::getInstance(LangContext::getContent($lang));
-		if(!$cont->getValue()[$pro]){
-			return $pro;
+		if($lang=='en')
+			$name='English';
+		$name='Vietnamese';
+		$cont = Singleton::getInstance($lang, $name, LangContext::getContent($lang));
+		if(isset($cont->getValue()[$pro])){
+			return $cont->getValue()[$pro];
 		}
-		return $cont->getValue()[$pro];
+		return $pro;
 	}
 }
 
 session_start();
+$_SESSION['lang']='en';
 if (isset($_GET['lang'])) {
 	$_SESSION['lang']= $_GET['lang'];
 }
+$lang=$_SESSION['lang'];
 ?>
 
 <!DOCTYPE html>
@@ -85,13 +101,13 @@ if (isset($_GET['lang'])) {
 <h1><?php echo $_SESSION['lang']=='en' ? "REGISTER" : "ĐĂNG KÝ" ?></h1>
 <p><?php echo $_SESSION['lang']=='en' ? "Creat your account. It's free and only takes a minute. " : "Tạo tài khoản của bạn. Miễn phí và chỉ mất một phút. " ?></p>
 <div class="name">
-<input class="col-md-6 cl1" type="text" placeholder="<?php echo LangContext::getValue($_SESSION['lang'],'firstname') ?>"name="firstname">
-<input class="col-md-6 cl2" type="text" placeholder="<?php echo LangContext::getValue($_SESSION['lang'],'lastname') ?>" name="lastname">
+<input class="col-md-6 cl1" type="text" placeholder="<?php echo LangContext::getValue($lang,'firstname') ?>"name="firstname">
+<input class="col-md-6 cl2" type="text" placeholder="<?php echo LangContext::getValue($lang,'lastname') ?>" name="lastname">
 </div>
-<input class="col-md-12" type="text" placeholder="<?php echo LangContext::getValue($_SESSION['lang'],'email') ?>" name="email">
-<input class="col-md-12" type="password" placeholder="<?php echo LangContext::getValue($_SESSION['lang'],'password') ?>" name="password">
-<input class="col-md-12" type="password" placeholder="<?php echo LangContext::getValue($_SESSION['lang'],'confirmpassword') ?>" name="confirm">
-<input type="submit" value="<?php echo LangContext::getValue($_SESSION['lang'],'registernow') ?>" class="registerbtn">
+<input class="col-md-12" type="text" placeholder="<?php echo LangContext::getValue($lang,'email') ?>" name="email">
+<input class="col-md-12" type="password" placeholder="<?php echo LangContext::getValue($lang,'password') ?>" name="password">
+<input class="col-md-12" type="password" placeholder="<?php echo LangContext::getValue($lang,'confirmpassword') ?>" name="confirm">
+<input type="submit" value="<?php echo LangContext::getValue($lang,'registernow') ?>" class="registerbtn">
 </div>
 </form>
 </body>
