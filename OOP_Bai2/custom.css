@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+}
+input::-webkit-input-placeholder {color: #bbb; }
+input[type=text], input[type=password] {
+    padding: 10px;
+    display: inline-block;
+    border: 5px solid #eee;
+    background: #fff;
+}
+input[type=checkbox]{
+    padding-right: 20px;
+}
+.registerbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    width: 100%;
+}
+form { 
+    margin: 0 auto; 
+    width:250px;
+    border-radius: 1px;
+}
+.form_reg {
+    text-align: center;
+    width: 500px;
+    border: 50px solid #63738a;
+    background: #eee;
+}
+.form_reg p{
+    color: #888;
+}
+.form_lang {
+    margin-left: 0;
+    width: 500px;
+}
+.container {
+    width: auto !important;
+}
+h1 {
+    color: #888;
+}

@@ -1,0 +1,8 @@
+name="Name"
+register=Register
+firstname="FirstName"
+lastname="LastName"
+email="Email"
+password="Password"
+confirmpassword="Confirm Password"
+registernow="Register Now"

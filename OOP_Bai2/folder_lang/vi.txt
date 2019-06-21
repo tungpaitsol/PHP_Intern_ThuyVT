@@ -1,0 +1,8 @@
+name="Tên"
+register="Đăng ký"
+firstname="Tên đầu tiên"
+lastname="Họ và tên đệm"
+email="Thư"
+password="Mật khẩu"
+confirmpassword="Xác nhận mật khẩu"
+registernow="Đăng ký ngay"
